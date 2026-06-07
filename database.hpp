@@ -18,7 +18,10 @@ public:
         database_name = idatabase_name;
         number_of_feilds = inumber_of_feilds;
         string filename = database_name + ".txt";
-        ofstream file(filename);
+
+        file.open(filename);
+        this->filename = filename;
+
         if (!file)
         {
             throw runtime_error("Could not create database file");
@@ -30,9 +33,24 @@ public:
         }
         file << first_row << "\n";
     }
-    
+    void insert_recored(vector<string> values)
+    {
+        if (values.size() != number_of_feilds)
+        {
+            throw invalid_argument("number of feilds are inconsistent");
+        }
+        string new_line = to_string(index);
+        for (auto &value : values)
+        {
+            new_line = new_line + " | " + value;
+        }
+        file << new_line << "\n";
+        ++index;
+    }
 
 private:
+    ofstream file;
+    string filename;
     string database_name;
     int number_of_feilds;
     int index = 1;
