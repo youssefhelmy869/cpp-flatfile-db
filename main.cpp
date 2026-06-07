@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <stdexcept>
 #include "database.hpp"
 
 using namespace std;
@@ -9,38 +7,68 @@ int main()
 {
     try
     {
-        // =========================
-        // TEST 1: Students table
-        // =========================
-        database students("students", 3, {"Name", "Age", "Grade"});
+        cout << "Creating database...\n";
 
-        students.insert_recored({"Ali", "16", "A"});
-        students.insert_recored({"Sara", "17", "A+"});
-        students.insert_recored({"Omar", "15", "B"});
-        students.insert_recored({"Mariam", "16", "A"});
-        students.insert_recored({"Youssef", "18", "B+"});
+        database students(
+            "StudentsDB",
+            4,
+            {"Name", "Age", "Grade", "Class"});
 
-        cout << "Students table created successfully.\n";
+        cout << "Database created successfully.\n\n";
 
-        // =========================
-        // TEST 2: Products table
-        // =========================
-        database products("products", 3, {"Product", "Price", "Stock"});
+        // Insert a large number of records
+        cout << "Inserting records...\n";
 
-        products.insert_recored({"Laptop", "15000", "5"});
-        products.insert_recored({"Phone", "8000", "10"});
-        products.insert_recored({"Tablet", "6000", "7"});
-        products.insert_recored({"Monitor", "4000", "3"});
+        for (int i = 1; i <= 50; ++i)
+        {
+            students.insert_recored({
+                "Student_" + to_string(i),
+                to_string(10 + (i % 8)),
+                string(1, 'A' + (i % 5)),
+                "Class_" + to_string((i % 3) + 1)
+            });
+        }
 
-        cout << "Products table created successfully.\n";
+        cout << "50 records inserted.\n\n";
 
-        // =========================
-        // TEST 3: Edge case (should throw error)
-        // =========================
-        cout << "Testing invalid insert...\n";
-        students.insert_recored({"OnlyName", "NoAge"}); // ❌ wrong size
+        // Test random lookups
+        cout << "Testing record retrieval...\n";
 
-        cout << "This line should NOT print.\n";
+        for (int i = 1; i <= 10; ++i)
+        {
+            int idx = (i * 5) % 50 + 1;
+
+            vector<string> rec = students.find_record(idx);
+
+            cout << "Record " << idx << ": ";
+
+            for (auto &v : rec)
+            {
+                cout << v << " ";
+            }
+
+            cout << "\n";
+        }
+
+        cout << "\nTesting boundary cases...\n";
+
+        // First record
+        vector<string> first = students.find_record(1);
+
+        // Last record
+        vector<string> last = students.find_record(50);
+
+        cout << "First record: ";
+        for (auto &v : first) cout << v << " ";
+        cout << "\n";
+
+        cout << "Last record: ";
+        for (auto &v : last) cout << v << " ";
+        cout << "\n";
+
+        cout << "\nTesting invalid access...\n";
+        students.find_record(999); // should throw
+
     }
     catch (const exception &e)
     {
