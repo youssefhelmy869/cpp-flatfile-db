@@ -132,8 +132,19 @@ public:
 
         file.close();
     }
+    void update_record(int index, vector<string> values)
+    {
+        // values vector is excpected without the index value;
+        if (index < 1 || index > records.size())
+        {
+            throw invalid_argument("index does not match any record in the database");
+        }
+        record *target_record = records[index - 1];
+        target_record->add_data(values, index);
+    }
 
 private:
+    // each record has a physical index which is [index] and the index is equal to index = position in records + 1
     vector<record *> records;
     ofstream file;
     string filename;
@@ -141,4 +152,33 @@ private:
     int number_of_feilds;
     int index = 1;
     vector<string> feild_names;
+    void update_file()
+    {
+        file.close();
+        file.open(filename, ios::out | ios::trunc);
+        file << "--------------------------" << database_name << "--------------------------\n";
+        // make sure all the elments in the vector has the index as their posistion after a deleter or a change
+        index = 1;
+        for (auto &rec : records)
+        {
+            rec->values[0] = to_string(index);
+            ++index;
+        }
+        string feild_names;
+        for (string &name : this->feild_names)
+        {
+            feild_names = feild_names + name + " | ";
+        }
+        file << feild_names << '\n';
+        for (record *rec : records)
+        {
+            string new_line = "";
+            vector<string>data = rec->export_record();
+            for (string value : data)
+            {
+                new_line = new_line + " | " + value;
+            }
+            file <<new_line<<"\n";
+        }
+    }
 };

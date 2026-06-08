@@ -1,4 +1,0 @@
-index | Name | Age | Grade
- 1 | Alice | 15 | A
- 2 | Bob | 16 | B
- 3 | Charlie | 14 | A+
