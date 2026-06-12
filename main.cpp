@@ -24,11 +24,10 @@ int main()
 
         for (int i = 1; i <= 1000; ++i)
         {
-            students.insert_recored({
-                "Student_" + to_string(i),
-                to_string(10 + (i % 9)),
-                string(1, 'A' + (i % 5)),
-                "Class_" + to_string((i % 10) + 1)});
+            students.insert_recored({"Student_" + to_string(i),
+                                     to_string(10 + (i % 9)),
+                                     string(1, 'A' + (i % 5)),
+                                     "Class_" + to_string((i % 10) + 1)});
         }
 
         cout << "1000 records inserted.\n\n";
@@ -65,27 +64,24 @@ int main()
 
         students.update_record(
             1,
-            {
-                "UPDATED_STUDENT",
-                "18",
-                "A+",
-                "Elite_Class"});
+            {"UPDATED_STUDENT",
+             "18",
+             "A+",
+             "Elite_Class"});
 
         students.update_record(
             500,
-            {
-                "MIDPOINT_STUDENT",
-                "17",
-                "B+",
-                "Special_Class"});
+            {"MIDPOINT_STUDENT",
+             "17",
+             "B+",
+             "Special_Class"});
 
         students.update_record(
             1000,
-            {
-                "LAST_STUDENT",
-                "19",
-                "A+",
-                "Top_Class"});
+            {"LAST_STUDENT",
+             "19",
+             "A+",
+             "Top_Class"});
 
         cout << "Updates completed.\n\n";
 
@@ -139,9 +135,8 @@ int main()
         try
         {
             students.insert_recored(
-                {
-                    "OnlyName",
-                    "OnlyAge"});
+                {"OnlyName",
+                 "OnlyAge"});
         }
         catch (exception &e)
         {
@@ -162,11 +157,10 @@ int main()
         {
             students.update_record(
                 1500,
-                {
-                    "Fake",
-                    "10",
-                    "C",
-                    "Class"});
+                {"Fake",
+                 "10",
+                 "C",
+                 "Class"});
         }
         catch (exception &e)
         {
@@ -187,7 +181,6 @@ int main()
         {
             students.find_record(i);
         }
-
         cout << "1000 retrievals completed.\n\n";
 
         cout << "All tests completed successfully.\n";

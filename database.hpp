@@ -79,8 +79,10 @@ public:
         }
         file << first_row << "\n";
     }
+
     database(const database &) = delete;
     database &operator=(const database &) = delete;
+
     void insert_recored(vector<string> values)
     {
         if (values.size() != number_of_feilds)
@@ -100,6 +102,7 @@ public:
 
         ++index;
     }
+
     vector<string> find_record(int index)
     {
         record *target_record = nullptr;
@@ -123,6 +126,7 @@ public:
             return target_record->export_record();
         }
     }
+
     ~database()
     {
         for (record *rec : records)
@@ -132,6 +136,7 @@ public:
 
         file.close();
     }
+
     void update_record(int index, vector<string> values)
     {
         // values vector is excpected without the index value;
@@ -141,6 +146,17 @@ public:
         }
         record *target_record = records[index - 1];
         target_record->add_data(values, index);
+        update_file();
+    }
+    void delete_record(int index)
+    {
+        if (index < 1 || index > records.size())
+        {
+            throw invalid_argument("when trying to delete a record the index inputed was inconsistent");
+        }
+        delete records[index -1];
+        records.erase(records.begin() + (index-1));
+        update_file();
     }
 
 private:
@@ -169,16 +185,16 @@ private:
         {
             feild_names = feild_names + name + " | ";
         }
-        file << feild_names << '\n';
+        file<<"index | " << feild_names << '\n';
         for (record *rec : records)
         {
             string new_line = "";
-            vector<string>data = rec->export_record();
+            vector<string> data = rec->export_record();
             for (string value : data)
             {
                 new_line = new_line + " | " + value;
             }
-            file <<new_line<<"\n";
+            file << new_line << "\n";
         }
     }
 };
