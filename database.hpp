@@ -55,17 +55,16 @@ struct record
 };
 class database
 {
-    // database must be consistent with 
-    // . index = position in vector + 1 
+    // database must be consistent with
+    // . index = position in vector + 1
     // . these varaible must always be stored
-    //      - filename 
+    //      - filename
     //      - database name
     //      - number of feilds
     //      - feild names
     //      - the vector that contains the records
     // each records index value is just used to make finding a record to be 0(1) not as a primary key
 public:
-    
     database(bool new_database, string idatabase_name, int inumber_of_feilds = 0, vector<string> feild_names = {})
     {
         // if the new_database = false then the idatabase show be the file name
@@ -76,13 +75,15 @@ public:
         }
         if (new_database == true)
         {
+            cout << "creating database\n";
             this->feild_names = feild_names;
             database_name = idatabase_name;
             number_of_feilds = inumber_of_feilds;
             string filename = database_name + ".txt";
 
-            file.open(filename, ios::out | ios::trunc);
+            file.open(filename, ios::out | ios::in | ios::trunc);
             this->filename = filename;
+            file << "--------------------------" << database_name << "--------------------------\n";
 
             if (!file)
             {
@@ -94,10 +95,82 @@ public:
                 first_row = first_row + " | " + field;
             }
             file << first_row << "\n";
+            
+            cout << "database created succssefully\n";
         }
         else
+
         {
-            //code to extract data from old file 
+            if (idatabase_name.substr(idatabase_name.size() - 4) != ".txt")
+            {
+                throw invalid_argument("input does not contain a proper file name");
+            }
+            filename = idatabase_name;
+            database_name = idatabase_name.substr(0, idatabase_name.size() - 4);
+            file.open(filename, ios::in | ios::out);
+            if (!file)
+            {
+                throw runtime_error("Could not open database file");
+            }
+            string feilds_line;
+            getline(file, feilds_line);
+            getline(file, feilds_line);
+            // split string feild into vector [feild_names] using |
+            string word;
+            for (char ch : feilds_line)
+            {
+                if (ch == '|')
+                {
+                    if (word != "index")
+                    {
+                        this->feild_names.push_back(word);
+                    }
+                    word = "";
+                }
+                else if (ch != ' ')
+                // feild names should not contain spaces
+                {
+                    word = word + ch;
+                }
+            }
+            this->feild_names.push_back(word);
+            // get the records from the file
+            string line;
+
+            while (getline(file, line))
+            {
+                if (line.empty())
+                {
+                    continue;
+                }
+                vector<string> values;
+                string value;
+                for (char ch : line)
+                {
+                    if (ch == '|')
+                    {
+                        values.push_back(value);
+                        value = "";
+                    }
+                    else
+                    {
+                        value = value + ch;
+                    }
+                }
+                values.push_back(value);
+                record *temp = new record(values.size() - 1);
+                int record_index = stoi(values[0]);
+                vector<string> values_without_index;
+                for (int i = 1; i < values.size(); ++i)
+                {
+                    values_without_index.push_back(values[i]);
+                }
+                temp->add_data(values_without_index, record_index);
+                this->records.push_back(temp);
+                ;
+            }
+            this->number_of_feilds = this->feild_names.size();
+            this->next_av_index = records.size() + 1;
         }
     }
 
@@ -154,7 +227,7 @@ public:
         {
             throw invalid_argument("index does not match any record in the database");
         }
-        if (values.size() != number_of_feilds-1)
+        if (values.size() != number_of_feilds - 1)
         {
             throw invalid_argument("number of feilds in does not match database");
         }
@@ -172,11 +245,12 @@ public:
         records.erase(records.begin() + (index - 1));
         update_file();
     }
+    
 
 private:
     // each record has a physical index which is [index] and the index is equal to index = position in records + 1
     vector<record *> records;
-    ofstream file;
+    fstream file;
     string filename;
     string database_name;
     int number_of_feilds;
@@ -186,7 +260,7 @@ private:
     void update_file()
     {
         file.close();
-        file.open(filename, ios::out | ios::trunc);
+        file.open(filename, ios::out | ios::trunc | ios::in);
         file << "--------------------------" << database_name << "--------------------------\n";
         // make sure all the elments in the vector has the index as their posistion after a deleter or a change
         next_av_index = 1;

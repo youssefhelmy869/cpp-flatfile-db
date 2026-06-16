@@ -5,191 +5,185 @@ using namespace std;
 
 int main()
 {
-    try
+    vector<string> feilds = {"name", "age", "position", "salary"};
+    database workers(true, "workers", 4, feilds);
+    vector<string> names = {
+        "Liam",
+        "Noah",
+        "Oliver",
+        "Elijah",
+        "James",
+        "William",
+        "Benjamin",
+        "Lucas",
+        "Henry",
+        "Theodore",
+        "Jack",
+        "Levi",
+        "Alexander",
+        "Jackson",
+        "Mateo",
+        "Daniel",
+        "Michael",
+        "Mason",
+        "Sebastian",
+        "Ethan",
+        "Logan",
+        "Owen",
+        "Samuel",
+        "Jacob",
+        "Asher",
+        "Aiden",
+        "John",
+        "Joseph",
+        "Wyatt",
+        "David",
+        "Leo",
+        "Luke",
+        "Julian",
+        "Hudson",
+        "Grayson",
+        "Matthew",
+        "Ezra",
+        "Gabriel",
+        "Carter",
+        "Isaac",
+        "Jayden",
+        "Luca",
+        "Anthony",
+        "Dylan",
+        "Lincoln",
+        "Thomas",
+        "Maverick",
+        "Elias",
+        "Josiah",
+        "Charles",
+        "Caleb",
+        "Christopher",
+        "Ezekiel",
+        "Miles",
+        "Jaxon",
+        "Isaiah",
+        "Andrew",
+        "Joshua",
+        "Nathan",
+        "Nolan",
+        "Adrian",
+        "Cameron",
+        "Santiago",
+        "Eli",
+        "Aaron",
+        "Ryan",
+        "Angel",
+        "Cooper",
+        "Waylon",
+        "Easton",
+        "Kai",
+        "Christian",
+        "Landon",
+        "Colton",
+        "Roman",
+        "Axel",
+        "Brooks",
+        "Jonathan",
+        "Robert",
+        "Jameson",
+        "Ian",
+        "Everett",
+        "Greyson",
+        "Wesley",
+        "Jeremiah",
+        "Hunter",
+        "Leonardo",
+        "Jordan",
+        "Jose",
+        "Bennett",
+        "Silas",
+        "Nicholas",
+        "Parker",
+        "Beau",
+        "Weston",
+        "Austin",
+        "Connor",
+        "Carson",
+        "Dominic"};
+    vector<string> positions = {
+        "Manager",
+        "Assistant Manager",
+        "Team Leader",
+        "Supervisor",
+        "Coordinator",
+        "Administrator",
+        "Director",
+        "Executive",
+        "Analyst",
+        "Consultant",
+        "Engineer",
+        "Senior Engineer",
+        "Junior Engineer",
+        "Software Developer",
+        "Web Developer",
+        "Database Administrator",
+        "System Administrator",
+        "Network Engineer",
+        "Project Manager",
+        "Product Manager",
+        "Accountant",
+        "Financial Analyst",
+        "Auditor",
+        "Sales Representative",
+        "Sales Manager",
+        "Marketing Specialist",
+        "Marketing Manager",
+        "Human Resources Officer",
+        "Recruiter",
+        "Customer Service Representative",
+        "Support Specialist",
+        "Operations Manager",
+        "Business Analyst",
+        "Research Assistant",
+        "Research Scientist",
+        "Data Analyst",
+        "Data Scientist",
+        "Quality Assurance Engineer",
+        "Quality Control Inspector",
+        "Technician",
+        "Mechanic",
+        "Architect",
+        "Graphic Designer",
+        "UX Designer",
+        "UI Designer",
+        "Content Writer",
+        "Editor",
+        "Teacher",
+        "Professor",
+        "Intern"};
+    int i = 0;
+    int age = 18;
+    int j = 0;
+
+    for (auto &name : names)
     {
-        cout << "Creating database...\n";
-
-        database students(
-            "Students",
-            4,
-            {"Name", "Age", "Grade", "Class"});
-
-        cout << "Database created.\n\n";
-
-        // =====================================
-        // Insert 1000 records
-        // =====================================
-
-        cout << "Inserting records...\n";
-
-        for (int i = 1; i <= 1000; ++i)
+        ++i;
+        ++age;
+        ++j;
+        vector<string> values = {name, to_string(age), positions[j], to_string((i * j * age) ^ i)};
+        workers.insert_recored(values);
+        if (i >= 99)
         {
-            students.insert_recored({"Student_" + to_string(i),
-                                     to_string(10 + (i % 9)),
-                                     string(1, 'A' + (i % 5)),
-                                     "Class_" + to_string((i % 10) + 1)});
+            i = 0;
         }
-
-        cout << "1000 records inserted.\n\n";
-
-        // =====================================
-        // Retrieve records
-        // =====================================
-
-        cout << "Testing find_record...\n";
-
-        vector<int> test_ids = {1, 100, 500, 750, 1000};
-
-        for (int id : test_ids)
+        if (age >= 95)
         {
-            vector<string> rec = students.find_record(id);
-
-            cout << "Record " << id << ": ";
-
-            for (string &value : rec)
-            {
-                cout << value << " ";
-            }
-
-            cout << '\n';
+            age = 18;
         }
-
-        cout << '\n';
-
-        // =====================================
-        // Update records
-        // =====================================
-
-        cout << "Updating records...\n";
-
-        students.update_record(
-            1,
-            {"UPDATED_STUDENT",
-             "18",
-             "A+",
-             "Elite_Class"});
-
-        students.update_record(
-            500,
-            {"MIDPOINT_STUDENT",
-             "17",
-             "B+",
-             "Special_Class"});
-
-        students.update_record(
-            1000,
-            {"LAST_STUDENT",
-             "19",
-             "A+",
-             "Top_Class"});
-
-        cout << "Updates completed.\n\n";
-
-        // =====================================
-        // Verify updates
-        // =====================================
-
-        cout << "Verifying updates...\n";
-
-        for (int id : {1, 500, 1000})
+        if (j >= 49)
         {
-            vector<string> rec = students.find_record(id);
-
-            cout << "Record " << id << ": ";
-
-            for (string &value : rec)
-            {
-                cout << value << " ";
-            }
-
-            cout << '\n';
+            j = 0;
         }
-
-        cout << '\n';
-
-        // =====================================
-        // Invalid find test
-        // =====================================
-
-        cout << "Testing invalid find...\n";
-
-        try
-        {
-            students.find_record(2000);
-        }
-        catch (exception &e)
-        {
-            cout << "Expected error: "
-                 << e.what()
-                 << '\n';
-        }
-
-        cout << '\n';
-
-        // =====================================
-        // Invalid insert test
-        // =====================================
-
-        cout << "Testing invalid insert...\n";
-
-        try
-        {
-            students.insert_recored(
-                {"OnlyName",
-                 "OnlyAge"});
-        }
-        catch (exception &e)
-        {
-            cout << "Expected error: "
-                 << e.what()
-                 << '\n';
-        }
-
-        cout << '\n';
-
-        // =====================================
-        // Invalid update test
-        // =====================================
-
-        cout << "Testing invalid update...\n";
-
-        try
-        {
-            students.update_record(
-                1500,
-                {"Fake",
-                 "10",
-                 "C",
-                 "Class"});
-        }
-        catch (exception &e)
-        {
-            cout << "Expected error: "
-                 << e.what()
-                 << '\n';
-        }
-
-        cout << '\n';
-
-        // =====================================
-        // Stress retrieval
-        // =====================================
-
-        cout << "Running retrieval stress test...\n";
-
-        for (int i = 1; i <= 1000; ++i)
-        {
-            students.find_record(i);
-        }
-        cout << "1000 retrievals completed.\n\n";
-
-        cout << "All tests completed successfully.\n";
-    }
-    catch (exception &e)
-    {
-        cout << "\nFATAL ERROR:\n";
-        cout << e.what() << '\n';
     }
 
-    return 0;
+    
+    
+
 }
