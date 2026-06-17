@@ -3,8 +3,24 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
+#include <algorithm>
 
 using namespace std;
+
+int liner_search(string value, vector<string> values)
+{
+    // returns the index of the value in the array if it is not in the vector then retrun - 1
+    int index = -1;
+    for (int i = 0; i < values.size(); ++i)
+    {
+        if (values[i] == value)
+        {
+            index = i;
+            return index;
+        }
+    }
+    return index;
+}
 struct record
 {
     string *values = nullptr;
@@ -95,7 +111,7 @@ public:
                 first_row = first_row + " | " + field;
             }
             file << first_row << "\n";
-            
+
             cout << "database created succssefully\n";
         }
         else
@@ -245,7 +261,38 @@ public:
         records.erase(records.begin() + (index - 1));
         update_file();
     }
-    
+
+    int find_index(string feild_name, string value)
+    {
+        
+        // if the value is not found -1 is returned
+        int return_index = -1;
+        // find the feild_name index that corrosponds to the index of the value in the vector in records
+
+        int feild_name_index = liner_search(feild_name, this->feild_names);
+        if (feild_name_index == -1)
+        {
+            throw invalid_argument("this feild name does not exsisit in the database");
+        }
+        // adding 1 to the feild_name_index because the feild names vector does not account for the index colum so adding one will make it 
+        //corrospond to the actual vector in each record
+        ++feild_name_index;
+        cout << "[find index] feild name found index is " << feild_name_index << "\n";
+        value = remove_spaces(value);
+        for (record *rec : records)
+        {
+            vector<string> records_values = rec->export_record();
+            if (remove_spaces(records_values[feild_name_index]) == value)
+            {
+                return_index = stoi(records_values[0]);
+            }
+        }
+        if (return_index == -1)
+        {
+            cout << "[find_index] value was not found \n";
+        }
+        return return_index;
+    }
 
 private:
     // each record has a physical index which is [index] and the index is equal to index = position in records + 1
@@ -285,5 +332,10 @@ private:
             }
             file << new_line << "\n";
         }
+    }
+    inline string remove_spaces(string value)
+    {
+        value.erase(remove(value.begin(), value.end(), ' '), value.end());
+        return value;
     }
 };
