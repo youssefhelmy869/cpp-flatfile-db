@@ -183,8 +183,7 @@ int main()
         }
     }
 
+    cout << to_string(workers.find_index("position", "Assistant Manager"));
     
-    cout<<to_string(workers.find_index("position","Assistant Manager"));
     return 0;
-
 }

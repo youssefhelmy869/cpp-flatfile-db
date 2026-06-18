@@ -263,7 +263,7 @@ public:
     }
 
     int find_index(string feild_name, string value)
-    {
+    {   // retruns the first record with the value
 
         // if the value is not found -1 is returned
         int return_index = -1;
@@ -284,6 +284,7 @@ public:
             vector<string> records_values = rec->export_record();
             if (remove_spaces(records_values[feild_name_index]) == value)
             {
+                
                 return stoi(records_values[0]);
             }
         }
@@ -295,6 +296,7 @@ public:
     }
     vector<int> find_all_index(string feild_name, string value)
     {
+        cout << "[find all index] funtion found\n";
         // returns all the indexes that contain the value in a vector
         vector<int> indexes;
         int feild_name_index = liner_search(feild_name, this->feild_names);
