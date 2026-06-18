@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int liner_search(string value, vector<string> values)
+inline int liner_search(string value, vector<string> values)
 {
     // returns the index of the value in the array if it is not in the vector then retrun - 1
     int index = -1;
@@ -264,7 +264,7 @@ public:
 
     int find_index(string feild_name, string value)
     {
-        
+
         // if the value is not found -1 is returned
         int return_index = -1;
         // find the feild_name index that corrosponds to the index of the value in the vector in records
@@ -274,8 +274,8 @@ public:
         {
             throw invalid_argument("this feild name does not exsisit in the database");
         }
-        // adding 1 to the feild_name_index because the feild names vector does not account for the index colum so adding one will make it 
-        //corrospond to the actual vector in each record
+        // adding 1 to the feild_name_index because the feild names vector does not account for the index colum so adding one will make it
+        // corrospond to the actual vector in each record
         ++feild_name_index;
         cout << "[find index] feild name found index is " << feild_name_index << "\n";
         value = remove_spaces(value);
@@ -284,7 +284,7 @@ public:
             vector<string> records_values = rec->export_record();
             if (remove_spaces(records_values[feild_name_index]) == value)
             {
-                return_index = stoi(records_values[0]);
+                return stoi(records_values[0]);
             }
         }
         if (return_index == -1)
@@ -292,6 +292,33 @@ public:
             cout << "[find_index] value was not found \n";
         }
         return return_index;
+    }
+    vector<int> find_all_index(string feild_name, string value)
+    {
+        // returns all the indexes that contain the value in a vector
+        vector<int> indexes;
+        int feild_name_index = liner_search(feild_name, this->feild_names);
+        if (feild_name_index == -1)
+        {
+            throw invalid_argument("this feild does not exsit in the database");
+        }
+        // adding 1 to the feild_name_index because the feild names vector does not account for the index colum so adding one will make it
+        // corrospond to the actual vector in each record
+        ++feild_name_index;
+        value = remove_spaces(value);
+        for (record *rec : this->records)
+        {
+            vector<string> record_values = rec->export_record();
+            if (remove_spaces(record_values[feild_name_index]) == value)
+            {
+                indexes.push_back(stoi(record_values[0]));
+            }
+        }
+        if (indexes.empty())
+        {
+            cout << "[find_all_index] value was not found \n";
+        }
+        return indexes;
     }
 
 private:
