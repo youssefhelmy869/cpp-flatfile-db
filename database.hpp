@@ -7,7 +7,7 @@
 
 using namespace std;
 
-inline int linear_search(string value, vector<string> values)
+inline int linear_searchgot(string value, vector<string> values)
 {
     // returns the index of the value in the array if it is not in the vector then retrun - 1
     int index = -1;
