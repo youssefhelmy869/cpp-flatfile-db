@@ -7,7 +7,7 @@
 
 using namespace std;
 
-inline int liner_search(string value, vector<string> values)
+inline int linear_search(string value, vector<string> values)
 {
     // returns the index of the value in the array if it is not in the vector then retrun - 1
     int index = -1;
@@ -269,7 +269,7 @@ public:
         int return_index = -1;
         // find the feild_name index that corrosponds to the index of the value in the vector in records
 
-        int feild_name_index = liner_search(feild_name, this->feild_names);
+        int feild_name_index = linear_search(feild_name, this->feild_names);
         if (feild_name_index == -1)
         {
             throw invalid_argument("this feild name does not exsisit in the database");
@@ -284,7 +284,7 @@ public:
             vector<string> records_values = rec->export_record();
             if (remove_spaces(records_values[feild_name_index]) == value)
             {
-                
+
                 return stoi(records_values[0]);
             }
         }
@@ -299,7 +299,7 @@ public:
         cout << "[find all index] funtion found\n";
         // returns all the indexes that contain the value in a vector
         vector<int> indexes;
-        int feild_name_index = liner_search(feild_name, this->feild_names);
+        int feild_name_index = linear_search(feild_name, this->feild_names);
         if (feild_name_index == -1)
         {
             throw invalid_argument("this feild does not exsit in the database");
